@@ -5,9 +5,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit;
 }
 ?>
-<?php include('/brsk_store/admin/includes/header_admin.php'); ?>
+<?php include '/brsk_store/admin/includes/header_admin.php'; ?>
 
-<div class="container mt-5">
+<div class="container-fluid py-4">
     <h2>Welcome to the Admin Dashboard</h2>
 </div>
 

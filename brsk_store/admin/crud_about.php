@@ -5,6 +5,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
+}
+
 // Fetch existing about data
 $sql = "SELECT * FROM about LIMIT 1";
 $about_data = null;
@@ -58,34 +60,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 ?>
+
 <?php
 include_once '/brsk_store/includes/connection.php';
 include_once '/brsk_store/admin/includes/header_admin.php';
 ?>
 
-<div class="container mt-4">
-    <h2>Edit About Us</h2>
+<main class="container mt-4">
+ <h2 class="mb-4">Edit About Us</h2>
 
     <?php if ($message): ?>
-        <div class="alert alert-info"><?php echo $message; ?></div>
+ <div class="alert alert-info" role="alert">
+ <?php echo $message; ?>
+ </div>
     <?php endif; ?>
 
     <form action="/brsk_store/admin/crud_about.php" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" name="content" rows="10" required><?php echo htmlspecialchars($about_data['content'] ?? ''); ?></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <?php if (!empty($about_data['image_path'])): ?>
-                <img src="<?php echo $about_data['image_path']; ?>" alt="Current About Image" class="img-thumbnail mb-2" width="150">
-                <p>Current Image: <?php echo basename($about_data['image_path']); ?></p>
-            <?php endif; ?>
-            <input class="form-control" type="file" id="image" name="image" accept="image/*">
-        </div>
-        <button type="submit" class="btn btn-primary">Update About Us</button>
+ <div class="mb-3">
+ <label for="content" class="form-label">Content</label>
+ <textarea class="form-control" id="content" name="content" rows="10" required><?php echo htmlspecialchars($about_data['content'] ?? ''); ?></textarea>
+ </div>
+ <div class="mb-3">
+ <label for="image" class="form-label">Image</label>
+ <?php if (!empty($about_data['image_path'])): ?>
+ <div class="mb-2">
+ <img src="<?php echo $about_data['image_path']; ?>" alt="Current About Image" class="img-thumbnail" style="max-width: 200px;">
+ <p class="mt-2">Current Image: <?php echo basename($about_data['image_path']); ?></p>
+ </div>
+ <?php endif; ?>
+ <input class="form-control" type="file" id="image" name="image" accept="image/*">
+ </div>
+ <button type="submit" class="btn btn-primary">Update About Us</button>
     </form>
-</div>
+</main>
 
 <?php
 $conn->close();

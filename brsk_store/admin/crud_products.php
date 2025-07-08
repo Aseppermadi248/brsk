@@ -97,7 +97,7 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
     $stmt->close();
 }
 
-// Fetch Products
+// Fetch Products for display
 $sql = "SELECT * FROM products ORDER BY id DESC"; // Order by ID for consistency
 $result = $conn->query($sql);
 ?>
@@ -109,60 +109,74 @@ $result = $conn->query($sql);
         <div class="alert alert-info"><?php echo $message; ?></div>
     <?php endif; ?>
 
-    <h3>Add New Product</h3>
-    <form action="" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="name" class="form-label">Product Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+    <div class="card mb-4">
+ <div class="card-header">
+            <h3>Add New Product</h3>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Product Image</label>
-            <input type="file" class="form-control" id="image" name="image" required>
-        </div>
-        <button type="submit" name="add_product" class="btn btn-primary">Add Product</button>
-    </form>
+ <div class="card-body">
+ <form action="" method="post" enctype="multipart/form-data">
+ <div class="mb-3">
+ <label for="name" class="form-label">Product Name</label>
+ <input type="text" class="form-control" id="name" name="name" required>
+ </div>
+ <div class="mb-3">
+ <label for="description" class="form-label">Description</label>
+ <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+ </div>
+ <div class="mb-3">
+ <label for="price" class="form-label">Price</label>
+ <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+ </div>
+ <div class="mb-3">
+ <label for="image" class="form-label">Product Image</label>
+ <input type="file" class="form-control" id="image" name="image" required>
+ </div>
+ <button type="submit" name="add_product" class="btn btn-primary">Add Product</button>
+ </form>
+ </div>
+    </div>
 
-    <h3 class="mt-4">Existing Products</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+    <div class="card">
+ <div class="card-header">
+            <h3>Existing Products</h3>
+        </div>
+ <div class="card-body">
+ <div class="table-responsive">
+ <table class="table table-striped table-bordered">
+ <thead>
+ <tr>
+ <th>ID</th>
+ <th>Name</th>
+ <th>Price</th>
+ <th>Image</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ <?php
             if ($result->num_rows > 0) {
-                // Loop through each product and display it in a table row
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
-                    echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['price'] . "</td>";
-                    echo "<td><img src='/brsk_store/assets/images/" . $row['image'] . "' alt='" . $row['name'] . "' width='50'></td>";
-                    echo "<td>\n";
-                    echo "<a href='/brsk_store/admin/edit_product.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning me-2'>Edit</a>";
-                    echo "<a href='/brsk_store/admin/crud_products.php?delete=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete</a>";
-                    echo "</td>";
-                    echo "</tr>";
+ // Loop through each product and display it in a table row
+ while ($row = $result->fetch_assoc()) {
+ echo "<tr>";
+ echo "<td>" . $row['id'] . "</td>";
+ echo "<td>" . $row['name'] . "</td>";
+ echo "<td>" . $row['price'] . "</td>";
+ echo "<td><img src='/brsk_store/assets/images/" . $row['image'] . "' alt='" . $row['name'] . "' width='50'></td>";
+ echo "<td>\n";
+ echo "<a href='/brsk_store/admin/edit_product.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning me-2'>Edit</a>";
+ echo "<a href='/brsk_store/admin/crud_products.php?delete=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete</a>";
+ echo "</td>";
+ echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='5'>No products found.</td></tr>";
+ echo "<tr><td colspan='5' class='text-center'>No products found.</td></tr>";
             }
-            ?>
-        </tbody>
-    </table>
+ ?>
+ </tbody>
+ </table>
+ </div>
+ </div>
+        </div>
 </div>
 
 <?php // Include the necessary footer ?>

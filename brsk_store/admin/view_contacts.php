@@ -22,7 +22,7 @@ require_once 'includes/header_admin.php';
     }
     ?>
 
-    <table class="table table-bordered">
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -47,7 +47,7 @@ require_once 'includes/header_admin.php';
                     echo "<td>" . htmlspecialchars($row['message']) . "</td>";
                     echo "<td>" . $row['submitted_at'] . "</td>";
                     echo '<td>
-                            <form action="delete_contact.php" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this message?\');">
+                            <form action="" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this message?\');">
                                 <input type="hidden" name="contact_id" value="' . $row['id'] . '">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
@@ -64,4 +64,33 @@ require_once 'includes/header_admin.php';
 
 <?php
 require_once 'includes/footer_admin.php';
+?>
+
+<?php
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
+    $contact_id = $_POST['contact_id'];
+
+    // Include database connection
+    require_once '../includes/connection.php';
+
+    // Prepare a delete statement
+    $sql = "DELETE FROM contacts WHERE id = ?";
+
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind variables to the prepared statement as parameters
+        $stmt->bind_param("i", $contact_id);
+
+        // Attempt to execute the prepared statement
+        if ($stmt->execute()) {
+            header('Location: view_contacts.php?delete_success=true');
+            exit();
+        } else {
+            header('Location: view_contacts.php?delete_error=true');
+            exit();
+        }
+        $stmt->close();
+    }
+    $conn->close();
+}
 ?>
