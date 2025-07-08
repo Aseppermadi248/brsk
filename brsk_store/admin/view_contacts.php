@@ -7,7 +7,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 // Include necessary files
-require_once 'includes/header_admin.php';
+require_once 'includes/header_admin.php'; // Admin header
+require_once '../includes/connection.php'; // Database connection
 ?>
 
 <div class="container mt-4">
@@ -68,16 +69,13 @@ require_once 'includes/footer_admin.php';
 
 <?php
 // Handle delete request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id']) && isset($conn)) {
     $contact_id = $_POST['contact_id'];
-
-    // Include database connection
-    require_once '../includes/connection.php';
 
     // Prepare a delete statement
     $sql = "DELETE FROM contacts WHERE id = ?";
 
-    if ($stmt = $conn->prepare($sql)) {
+    if ($stmt = $conn->prepare($sql)) { // Check if $conn is available
         // Bind variables to the prepared statement as parameters
         $stmt->bind_param("i", $contact_id);
 
@@ -91,6 +89,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
         }
         $stmt->close();
     }
-    $conn->close();
 }
 ?>

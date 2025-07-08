@@ -1,4 +1,4 @@
-<?php include __DIR__ . '/includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 <div class="container mt-5">
     <h2>Contact Us</h2>
@@ -25,4 +25,4 @@
     </form>
 </div>
 
-<?php include __DIR__ . '/includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>

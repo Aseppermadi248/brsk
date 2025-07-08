@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php
-include_once '/brsk_store/includes/connection.php';
-include_once '/brsk_store/admin/includes/header_admin.php';
+include_once '../includes/connection.php';
+include_once 'includes/header_admin.php';
 ?>
 
 <main class="container mt-4">
@@ -96,5 +96,5 @@ include_once '/brsk_store/admin/includes/header_admin.php';
 
 <?php
 $conn->close();
-include_once '/brsk_store/admin/includes/footer_admin.php';
+include_once 'includes/footer_admin.php';
 ?>

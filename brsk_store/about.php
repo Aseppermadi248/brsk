@@ -10,7 +10,7 @@ if ($result->num_rows > 0) {
 }
 $conn->close();
 
-include __DIR__ . '/includes/header.php';
+include 'includes/header.php';
 ?>
 
 <div class="container my-5">
@@ -28,4 +28,4 @@ include __DIR__ . '/includes/header.php';
  </div>
  </section>
 </div>
-<?php include __DIR__ . '/includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>

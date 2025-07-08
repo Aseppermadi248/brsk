@@ -1,4 +1,4 @@
-<?php include '/brsk_store/includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 <section class="hero-section">
     <div class="container text-center text-white">
@@ -14,4 +14,4 @@
         align-items: center;
     }
 </style>
-<?php include '/brsk_store/includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>

@@ -2,6 +2,9 @@
 session_start();
 include '../includes/connection.php';
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -25,16 +28,12 @@ include '../includes/connection.php';
             exit();
         }
     } else {
-        // Invalid username
+        // Invalid username or password
         header("Location: index.php?error=invalid_credentials");
         exit();
     }
 } else {
-    header("Location: index.php");
-    exit();
-}
-?>
-<?php
+    // Redirect to login page if accessed directly
 session_start();
 include '../includes/connection.php';
 
@@ -62,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
     } else {
-        // Invalid username
+        // Invalid username or password
         header("Location: index.php?error=invalid_credentials");
         exit();
     }
@@ -71,4 +70,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     header("Location: index.php");
     exit();
 }
-?>
+

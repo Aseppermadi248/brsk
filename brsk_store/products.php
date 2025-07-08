@@ -1,9 +1,9 @@
 <<<<<<< HEAD
-<?php include '/brsk_store/includes/connection.php'; ?>
-<?php include '/brsk_store/includes/header.php'; ?>
+<?php include './includes/connection.php'; ?>
+<?php include './includes/header.php'; ?>
 
 <?php include '/brsk_store/includes/connection.php'; ?>
-
+<?php include './includes/header.php'; ?>
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 ?>
@@ -24,7 +24,7 @@
         $conn->close();
 ?>
 
-<?php include '/brsk_store/includes/footer.php'; ?>
+<?php include './includes/footer.php'; ?>
 =======
 <div class="container mt-5" style="padding-top: 5rem;">
     <h2 class="text-center mb-4">Our Products</h2>

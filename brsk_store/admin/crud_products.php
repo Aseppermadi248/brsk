@@ -6,8 +6,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-include_once '/brsk_store/includes/connection.php';
-// Include necessary header
+include_once '../includes/connection.php';
+// Include necessary admin header
 include_once '/brsk_store/admin/includes/header_admin.php';
 
 $message = '';
