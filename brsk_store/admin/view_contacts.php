@@ -1,93 +1,90 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_logged_in'])) {
-    // If not logged in, redirect to the login page
-    header('Location: index.php');
+// Check if the admin is logged in, otherwise redirect to the login page
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: index.php");
     exit();
 }
 
-// Include necessary files
-require_once 'includes/header_admin.php'; // Admin header
-require_once '../includes/connection.php'; // Database connection
+include_once '../includes/connection.php';
+
+$message = "";
+
+// Handle message deletion
+if (isset($_GET['delete'])) {
+    $id_to_delete = $_GET['delete'];
+    $stmt = $conn->prepare("DELETE FROM contacts WHERE id = ?");
+    $stmt->bind_param("i", $id_to_delete);
+    if ($stmt->execute()) {
+        $message = "Message deleted successfully.";
+    } else {
+        $message = "Error deleting message.";
+    }
+    $stmt->close();
+}
+
+// Fetch all contact messages
+$contacts = [];
+$sql = "SELECT * FROM contacts ORDER BY created_at DESC"; // Corrected column name
+if ($result = $conn->query($sql)) {
+    $contacts = $result->fetch_all(MYSQLI_ASSOC);
+    $result->free();
+}
+
 ?>
+<?php include_once 'includes/header_admin.php'; ?>
 
-<div class="container mt-4">
-    <h2>Contact Messages</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Contact Messages</h2>
 
-    <?php
-    if (isset($_GET['delete_success'])) {
-        echo '<div class="alert alert-success">Message deleted successfully.</div>';
-    }
-    if (isset($_GET['delete_error'])) {
-        echo '<div class="alert alert-danger">Error deleting message.</div>';
-    }
-    ?>
+    <?php if ($message): ?>
+        <div class="alert alert-info"><?php echo $message; ?></div>
+    <?php endif; ?>
 
-    <table class="table table-striped table-hover table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Submitted At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $sql = "SELECT * FROM contacts ORDER BY submitted_at DESC";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
-                    echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['message']) . "</td>";
-                    echo "<td>" . $row['submitted_at'] . "</td>";
-                    echo '<td>
-                            <form action="" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this message?\');">
-                                <input type="hidden" name="contact_id" value="' . $row['id'] . '">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                          </td>';
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6'>No contact messages found.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-header">
+            All Messages
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Received At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($contacts)): ?>
+                            <?php foreach ($contacts as $contact): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($contact['id']); ?></td>
+                                    <td><?php echo htmlspecialchars($contact['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($contact['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($contact['message']); ?></td>
+                                    <td><?php echo htmlspecialchars($contact['created_at']); ?></td>
+                                    <td>
+                                        <a href="view_contacts.php?delete=<?php echo $contact['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this message?');">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center">No contact messages found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php
-require_once 'includes/footer_admin.php';
-?>
-
-<?php
-// Handle delete request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id']) && isset($conn)) {
-    $contact_id = $_POST['contact_id'];
-
-    // Prepare a delete statement
-    $sql = "DELETE FROM contacts WHERE id = ?";
-
-    if ($stmt = $conn->prepare($sql)) { // Check if $conn is available
-        // Bind variables to the prepared statement as parameters
-        $stmt->bind_param("i", $contact_id);
-
-        // Attempt to execute the prepared statement
-        if ($stmt->execute()) {
-            header('Location: view_contacts.php?delete_success=true');
-            exit();
-        } else {
-            header('Location: view_contacts.php?delete_error=true');
-            exit();
-        }
-        $stmt->close();
-    }
-}
+$conn->close();
+include_once 'includes/footer_admin.php';
 ?>

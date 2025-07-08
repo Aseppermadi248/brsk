@@ -1,15 +1,16 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: /brsk_store/admin/index.php');
-    exit;
+// Check if the admin is logged in, otherwise redirect to the login page
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: index.php");
+    exit();
 }
-require_once __DIR__ . '/../includes/connection.php';
-require_once 'includes/header_admin.php';
-
+include 'includes/header_admin.php';
 ?>
-<div class="container-fluid py-4">
-    <h2>Welcome to the Admin Dashboard</h2>
+
+<div class="container mt-5" style="padding-top: 5rem;">
+    <h2 class="text-center">Admin Dashboard</h2>
+    <p class="text-center">Welcome to the admin area. You can manage the website content from here.</p>
 </div>
 
-<?php include('/brsk_store/admin/includes/footer_admin.php'); ?>
+<?php include 'includes/footer_admin.php'; ?>
